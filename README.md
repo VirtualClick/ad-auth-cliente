@@ -36,7 +36,7 @@ php artisan vendor:publish --provider="VirtualClick\AdAuthClient\AdAuthServicePr
 AD_AUTH_BASE_URL=https://sua-api.com/auth
 AD_AUTH_TIMEOUT=30
 AD_AUTH_APPLICATION_CODE=SIGLA
-AD_AUTH_KEY_TYPE=7
+AD_AUTH_KEY_TYPE=0
 ```
 
 ## Uso
