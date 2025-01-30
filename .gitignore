@@ -1,0 +1,28 @@
+# Composer
+/vendor/
+composer.lock
+
+# IDE
+/.idea/
+/.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Testes
+/coverage/
+.phpunit.result.cache
+phpunit.xml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+/docker/
+.env
+
+# Outros
+*.log
+*.cache
+.php_cs.cache
+.php-cs-fixer.cache

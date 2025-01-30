@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ad-auth-client
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    tty: true
+    command: tail -f /dev/null
