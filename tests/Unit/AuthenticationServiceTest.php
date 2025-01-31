@@ -8,6 +8,9 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Mockery;
+use ReflectionClass;
+use ReflectionException;
 use VirtualClick\AdAuthClient\Exceptions\AuthenticationException;
 use VirtualClick\AdAuthClient\Services\AuthenticationResponseService;
 use VirtualClick\AdAuthClient\Services\AuthenticationService;
@@ -16,70 +19,96 @@ use VirtualClick\AdAuthClient\Tests\TestCase;
 class AuthenticationServiceTest extends TestCase
 {
     protected $service;
+
     protected $mockHandler;
+
     protected $responseService;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Cria o mock do handler do Guzzle
         $this->mockHandler = new MockHandler();
         $handlerStack = HandlerStack::create($this->mockHandler);
         $client = new Client(['handler' => $handlerStack]);
 
-        // Mock do ResponseService
         $this->responseService = $this->createMock(AuthenticationResponseService::class);
 
-        // Cria o serviço
         $this->service = new AuthenticationService($this->responseService);
 
-        // Injeta o client mockado usando Reflection
         $reflection = new \ReflectionClass($this->service);
         $clientProperty = $reflection->getProperty('client');
         $clientProperty->setAccessible(true);
         $clientProperty->setValue($this->service, $client);
     }
 
-    public function test_successful_authentication()
+    /**
+     * @return void
+     *
+     * @throws ReflectionException
+     */
+    public function test_constructor_sets_correct_config(): void
     {
-        // Prepara o mock do ResponseService
+        config(['ad-auth.base_url' => 'http://test-api.com']);
+        config(['ad-auth.timeout' => 60]);
+
+        $service = new AuthenticationService($this->responseService);
+
+        $reflection = new ReflectionClass($service);
+
+        $baseUrlProperty = $reflection->getProperty('baseUrl');
+        $baseUrlProperty->setAccessible(true);
+
+        $clientProperty = $reflection->getProperty('client');
+        $clientProperty->setAccessible(true);
+
+        $this->assertEquals('http://test-api.com', $baseUrlProperty->getValue($service));
+
+        $client = $clientProperty->getValue($service);
+        $this->assertInstanceOf(Client::class, $client);
+
+        $clientReflection = new \ReflectionClass($client);
+        $configProperty = $clientReflection->getProperty('config');
+        $configProperty->setAccessible(true);
+        $config = $configProperty->getValue($client);
+
+        $this->assertEquals('http://test-api.com', $config['base_uri']);
+        $this->assertEquals(60, $config['timeout']);
+    }
+
+    /**
+     * @return void
+     *
+     * @throws AuthenticationException
+     */
+    public function test_successful_authentication(): void
+    {
         $expectedResponse = ['data' => 'validated_response'];
         $this->responseService->expects($this->once())
             ->method('validate')
             ->willReturn($expectedResponse);
 
-        // Prepara o mock do Guzzle
         $this->mockHandler->append(
             new Response(200, [], json_encode(['raw' => 'response']))
         );
 
-        // Executa o teste
         $result = $this->service->authenticate([
             'authKey' => 'test@example.com',
             'authPass' => 'password123',
         ]);
 
-        // Verifica o resultado
         $this->assertEquals($expectedResponse, $result);
     }
 
-    public function test_throws_exception_on_non_200_response()
-    {
-        $this->mockHandler->append(
-            new Response(500, [], 'Falha na autênticação')
-        );
-
-        $this->expectException(AuthenticationException::class);
-        $this->expectExceptionMessage('Falha na autênticação');
-
-        $this->service->authenticate([
-            'authKey' => 'test@example.com',
-            'authPass' => 'password123',
-        ]);
-    }
-
-    public function test_throws_exception_on_guzzle_error()
+    /**
+     * @return void
+     *
+     * @throws AuthenticationException
+     */
+    public function test_throws_exception_on_guzzle_error(): void
     {
         $this->mockHandler->append(
             new RequestException(
@@ -98,31 +127,30 @@ class AuthenticationServiceTest extends TestCase
         ]);
     }
 
-    public function test_sends_correct_request_payload()
+    /**
+     * @return void
+     *
+     * @throws AuthenticationException
+     */
+    public function test_sends_correct_request_payload(): void
     {
-        // Prepara o mock do ResponseService
         $this->responseService->expects($this->once())
             ->method('validate')
             ->willReturn(['data' => 'response']);
 
-        // Prepara uma resposta vazia
         $this->mockHandler->append(
             new Response(200, [], json_encode(['raw' => 'response']))
         );
 
-        // Dados de teste
         $credentials = [
             'authKey' => 'test@example.com',
             'authPass' => 'password123',
         ];
 
-        // Executa a autenticação
         $this->service->authenticate($credentials);
 
-        // Pega a última requisição feita
         $request = $this->mockHandler->getLastRequest();
 
-        // Verifica o método e o corpo da requisição
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals(
             json_encode($credentials),

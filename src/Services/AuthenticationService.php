@@ -41,11 +41,6 @@ class AuthenticationService implements AuthenticationInterface
             $response = $this->client->post('', [
                 'json' => $credentials,
             ]);
-
-            if ($response->getStatusCode() !== 200) {
-                throw new AuthenticationException('Falha na autênticação');
-            }
-
             $responseData = json_decode($response->getBody()->getContents(), true);
 
             return $this->responseService->validate($responseData);
