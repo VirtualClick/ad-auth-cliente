@@ -14,6 +14,10 @@ class AdAuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->publishes([
+            __DIR__ . '/../config/ad-auth.php' => config_path('ad-auth.php'),
+        ], 'config');
+
         $this->mergeConfigFrom(
             __DIR__ . '/../config/ad-auth.php',
             'ad-auth'
