@@ -9,9 +9,6 @@ use VirtualClick\AdAuthClient\Services\AuthenticationService;
 
 class AdAuthServiceProvider extends ServiceProvider
 {
-    /**
-     * @return void
-     */
     public function register()
     {
         $this->publishes([
@@ -23,11 +20,11 @@ class AdAuthServiceProvider extends ServiceProvider
             'ad-auth'
         );
 
-        $this->app->singleton(AuthenticationService::class);
+        $this->app->singleton(AuthenticationResponseService::class);
 
         $this->app->singleton(AuthenticationInterface::class, function ($app) {
-            return new AuthenticationResponseService(
-                $app->make(AuthenticationService::class)
+            return new AuthenticationService(
+                $app->make(AuthenticationResponseService::class)
             );
         });
 

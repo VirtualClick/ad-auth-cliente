@@ -37,14 +37,24 @@ class AuthenticationService implements AuthenticationInterface
      */
     public function authenticate(array $credentials): array
     {
+        if (! isset($credentials['authKey']) || ! isset($credentials['authPass'])) {
+            throw new AuthenticationException('Credenciais incompletas');
+        }
+
+        $payload = [
+            'authKey' => $credentials['authKey'],
+            'authPass' => $credentials['authPass'],
+            'authKeyType' => config('ad-auth.auth_key_type'),
+            'siglaAplicacao' => config('ad-auth.application_code'),
+        ];
+
         try {
             $response = $this->client->post('', [
-                'json' => $credentials,
+                'json' => $payload,
             ]);
             $responseData = json_decode($response->getBody()->getContents(), true);
 
-            return $this->responseService->validate($responseData);
-
+            return $this->responseService->handleResponse($responseData);
         } catch (GuzzleException $e) {
             throw new AuthenticationException('Falha na requisição: ' . $e->getMessage());
         }

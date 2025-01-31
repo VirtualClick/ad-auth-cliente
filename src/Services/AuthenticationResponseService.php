@@ -2,46 +2,10 @@
 
 namespace VirtualClick\AdAuthClient\Services;
 
-use VirtualClick\AdAuthClient\Contracts\AuthenticationInterface;
 use VirtualClick\AdAuthClient\Exceptions\AuthenticationException;
 
-class AuthenticationResponseService implements AuthenticationInterface
+class AuthenticationResponseService
 {
-    protected $authService;
-
-    /**
-     * @param AuthenticationService $authService
-     */
-    public function __construct(AuthenticationService $authService)
-    {
-        $this->authService = $authService;
-    }
-
-    /**
-     * @param array $credentials
-     *
-     * @return array
-     *
-     * @throws AuthenticationException
-     */
-    public function authenticate(array $credentials): array
-    {
-        if (!isset($credentials['authKey']) || !isset($credentials['authPass'])) {
-            throw new AuthenticationException('Credenciais incompletas');
-        }
-
-        $payload = [
-            'authKey' => $credentials['authKey'],
-            'authPass' => $credentials['authPass'],
-            'authKeyType' => config('ad-auth.auth_key_type'),
-            'siglaAplicacao' => config('ad-auth.application_code'),
-        ];
-
-        $response = $this->authService->authenticate($payload);
-
-        return $this->validate($response);
-    }
-
     /**
      * @param array $response
      *
@@ -49,19 +13,7 @@ class AuthenticationResponseService implements AuthenticationInterface
      *
      * @throws AuthenticationException
      */
-    public function validate(array $response): array
-    {
-        return $this->handleResponse($response);
-    }
-
-    /**
-     * @param array $response
-     *
-     * @return array
-     *
-     * @throws AuthenticationException
-     */
-    protected function handleResponse(array $response): array
+    public function handleResponse(array $response): array
     {
         if (($response['usuarioAtivo'] ?? 'N') !== 'S') {
             throw new AuthenticationException('Usuário inativo');
