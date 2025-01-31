@@ -15,7 +15,7 @@ Cliente Laravel para autenticação via API do Active Directory.
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:virtualclick/ad-auth-client.git"
+            "url": "git@github.com:VirtualClick/ad-auth-cliente.git"
         }
     ]
 }
