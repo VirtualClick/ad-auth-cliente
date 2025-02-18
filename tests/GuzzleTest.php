@@ -39,3 +39,63 @@ class GuzzleTest extends TestCase
         }
     }
 }
+
+//[
+//    {
+//        "mensagem": "Usuário encontrado.",
+//        "status": "OK",
+//        "usuarioAd": {
+//            "nome": "Sergio",
+//            "sobreNome": "Posto De Oliveira Hess",
+//            "cpf": "31503516857",
+//            "empresa": "Toxicologia Pardini",
+//            "departamento": "TI ADM",
+//            "sigla": "SPOH",
+//            "cargo": "DESENVOLVEDOR TI JUNIOR",
+//            "email": "sergio.hess@toxicologiapardini.com.br",
+//            "displayName": "Sergio Hess",
+//            "siglaUsuarioAd": "sergio.hess"
+//        },
+//        "perfilUsuario": {
+//            "id": 142947,
+//            "idAplicacao": 48,
+//            "idPerfil": 1,
+//            "idUsuario": 31503516857,
+//            "idEmpresa": 1,
+//            "siglaUsuario": "SPOH",
+//            "siglaAplicacao": "FENIX",
+//            "nomePerfil": "ADMINISTRADOR",
+//            "nomeAplicacao": "FENIX",
+//            "nomeUsuario": "SERGIO POSTO DE OLIVEIRA HESS",
+//            "descricaoPerfil": "ADMINISTRADOR",
+//            "tipoPerfil": "A"
+//        },
+//        "usuarioAtivo": "S",
+//        "usuarioIHP": {
+//            "id": 31503516857,
+//            "sigla": "SPOH",
+//            "nome": "Sergio Hess",
+//            "chapa": 31503516857,
+//            "empresa": "Toxicologia Pardini",
+//            "situacao": "A",
+//            "usuarioad": "sergio.hess"
+//        }
+//    },
+//    {
+//        "mensagem": "Usuário sem permissão de acesso.",
+//        "status": "NOK",
+//        "perfilUsuario": {
+//            "siglaAplicacao": "FENIX"
+//        }
+//    },
+//    {
+//        "mensagem": "Usuário sem permissão de acesso.",
+//        "status": "NOK",
+//        "perfilUsuario": {
+//            "idUsuario": 31503516857,
+//            "siglaUsuario": "SPOH",
+//            "siglaAplicacao": "FENIXXX"
+//        },
+//        "usuarioAtivo": "S"
+//    }
+//]
