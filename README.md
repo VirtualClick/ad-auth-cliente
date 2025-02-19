@@ -52,8 +52,8 @@ class LoginController
     {
         try {
             $userData = $auth->authenticate([
-                'authKey' => $request->username,
-                'authPass' => $request->password
+                'username' => $request->username,
+                'password' => $request->password
             ]);
             
             // $userData contém:
