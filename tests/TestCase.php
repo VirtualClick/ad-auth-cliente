@@ -20,25 +20,25 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @return string
+     * @return array
      */
-    protected function getResponseNotAllowed(): string
+    protected function getResponseNotAllowed(): array
     {
-        return json_encode([
+        return [
             'mensagem' => 'Usuário sem permissão de acesso.',
             'status' => 'NOK',
             'perfilUsuario' => [
                 'siglaAplicacao' => 'AAAAAAAAA',
             ],
-        ]);
+        ];
     }
 
     /**
-     * @return string
+     * @return array
      */
-    protected function getResponseSystemNotAllowed(): string
+    protected function getResponseSystemNotAllowed(): array
     {
-        return json_encode([
+        return [
             'mensagem' => 'Usuário sem permissão de acesso.',
             'status' => 'NOK',
             'perfilUsuario' => [
@@ -47,15 +47,15 @@ abstract class TestCase extends Orchestra
                 'siglaAplicacao' => 'AAAAAAAAA',
             ],
             'usuarioAtivo' => 'S',
-        ]);
+        ];
     }
 
     /**
-     * @return string
+     * @return array
      */
-    protected function getResponseADUser(): string
+    protected function getResponseADUser(): array
     {
-        return json_encode([
+        return [
             'mensagem' => 'Usuário encontrado.',
             'status' => 'OK',
             'usuarioAd' => [
@@ -71,8 +71,8 @@ abstract class TestCase extends Orchestra
                 'siglaUsuarioAd' => 'aaaaaa.aaaaaaa',
             ],
             'perfilUsuario' => [
-                'id' => 142947,
-                'idAplicacao' => 48,
+                'id' => 1,
+                'idAplicacao' => 1,
                 'idPerfil' => 1,
                 'idUsuario' => 12345678909,
                 'idEmpresa' => 1,
@@ -94,6 +94,6 @@ abstract class TestCase extends Orchestra
                 'situacao' => 'A',
                 'usuarioad' => 'aaaaaa.aaaaaaa',
             ],
-        ]);
+        ];
     }
 }

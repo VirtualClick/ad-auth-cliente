@@ -2,10 +2,9 @@
 
 namespace VirtualClick\AdAuthClient;
 
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use VirtualClick\AdAuthClient\Contracts\AuthenticationInterface;
-use VirtualClick\AdAuthClient\Rules\NotAllwedRule;
+use VirtualClick\AdAuthClient\Rules\NotAllowedRule;
 use VirtualClick\AdAuthClient\Rules\SystemNotAllowedRule;
 use VirtualClick\AdAuthClient\Services\RequestService;
 use VirtualClick\AdAuthClient\Transformers\ResponseTransformer;
@@ -16,7 +15,7 @@ class Authentication implements AuthenticationInterface
      * @var array
      */
     protected $rules = [
-        NotAllwedRule::class,
+        NotAllowedRule::class,
         SystemNotAllowedRule::class,
     ];
 
@@ -38,15 +37,16 @@ class Authentication implements AuthenticationInterface
             'password' => $password,
         ])();
 
-        $this->executeRules($response);
+        $responseArray = json_decode($response->getBody()->getContents(), true);
+        $this->executeRules($responseArray);
 
-        return ResponseTransformer::hanler($response->getBody()->getContents());
+        return ResponseTransformer::hanler($responseArray);
     }
 
     /**
      * @throws BindingResolutionException
      */
-    protected function executeRules(Response $response)
+    protected function executeRules(array $response)
     {
         foreach ($this->rules as $rule) {
             app()->make($rule)->validate($response);

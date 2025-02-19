@@ -2,17 +2,12 @@
 
 namespace VirtualClick\AdAuthClient\Contracts;
 
-use GuzzleHttp\Psr7\Response;
-use VirtualClick\AdAuthClient\Exceptions\RuleException;
-
 interface RuleInterface
 {
     /**
-     * @param Response $response
+     * @param array $response
      *
      * @return void
-     *
-     * @throws RuleException
      */
-    public function validate(Response $response): void;
+    public function validate(array $response): void;
 }
