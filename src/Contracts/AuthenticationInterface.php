@@ -2,7 +2,7 @@
 
 namespace VirtualClick\AdAuthClient\Contracts;
 
-use Exception;
+use VirtualClick\AdAuthClient\Exceptions\AuthenticationException;
 
 interface AuthenticationInterface
 {
@@ -12,7 +12,7 @@ interface AuthenticationInterface
      *
      * @return array|null
      *
-     * @throws Exception
+     * @throws AuthenticationException
      */
     public function authenticate(string $username, string $password): ?array;
 }
