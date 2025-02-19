@@ -2,9 +2,7 @@
 
 namespace VirtualClick\AdAuthClient\Exceptions;
 
-use Exception;
-
-class ForbiddenException extends Exception
+class ForbiddenException extends AuthenticationException
 {
     /**
      * @var string
